@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>NHL Play-by-Play Data Analysis Milestone 2 | NHL Play-by-Play Data Analysis</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="NHL Play-by-Play Data Analysis Milestone 2" />
+<meta name="author" content="Lucius Hatherly (lucius.hatherly@umontreal.ca), Sina Vali (Sina.vali@umontreal.ca), Shivam Ardeshna (shivam.mayurbhai.ardeshna@umontreal.ca)" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="NHL Play-by-Play Data Analysis Milestone 2" />
+<meta property="og:description" content="NHL Play-by-Play Data Analysis Milestone 2" />
+<link rel="canonical" href="http://localhost:4000/data%20science/nhl/python/2025/11/07/nhl-play-by-play-analysis-milestone-2.html" />
+<meta property="og:url" content="http://localhost:4000/data%20science/nhl/python/2025/11/07/nhl-play-by-play-analysis-milestone-2.html" />
+<meta property="og:site_name" content="NHL Play-by-Play Data Analysis" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-11-07T00:00:00-05:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="NHL Play-by-Play Data Analysis Milestone 2" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Lucius Hatherly (lucius.hatherly@umontreal.ca), Sina Vali (Sina.vali@umontreal.ca), Shivam Ardeshna (shivam.mayurbhai.ardeshna@umontreal.ca)"},"dateModified":"2025-11-07T00:00:00-05:00","datePublished":"2025-11-07T00:00:00-05:00","description":"NHL Play-by-Play Data Analysis Milestone 2","headline":"NHL Play-by-Play Data Analysis Milestone 2","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/data%20science/nhl/python/2025/11/07/nhl-play-by-play-analysis-milestone-2.html"},"url":"http://localhost:4000/data%20science/nhl/python/2025/11/07/nhl-play-by-play-analysis-milestone-2.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="NHL Play-by-Play Data Analysis" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">NHL Play-by-Play Data Analysis</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/_posts/2025-10-04-nhl-play-by-play-analysis%20milestone%201.html">NHL Play-by-Play Data Analysis</a><a class="page-link" href="/_posts/2025-11-07-nhl-play-by-play-analysis%20milestone%202.html">NHL Play-by-Play Data Analysis Milestone 2</a><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">NHL Play-by-Play Data Analysis Milestone 2</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2025-11-07T00:00:00-05:00" itemprop="datePublished">Nov 7, 2025
+      </time>• <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="p-author h-card" itemprop="name">Lucius Hatherly (lucius.hatherly@umontreal.ca), Sina Vali (Sina.vali@umontreal.ca), Shivam Ardeshna (shivam.mayurbhai.ardeshna@umontreal.ca)</span></span></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h1 id="nhl-play-by-play-data-analysis-milestone-2">NHL Play-by-Play Data Analysis Milestone 2</h1>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>For this second milestone, we extend upon the previous work on NHL play-by-play data (2016 – 2024) in Milestone I to move past data acquisition and visualization into feature engineering, statistical modeling, and predictive analysis. The data for Milestone I only focuses on NHL seasons between 2016-2021 rather than all seasons between 2016-2024 like in Milestone I.</p>
+
+<p>Our main goal for this milestone is to estimate the probability that any given shot produces a goal. This in professional hockey analytics is known as Expected Goals (xG).</p>
+
+<p>To start from building on the cleaned and structured datasets from Milestone 1, we design a series of experiments that extract and refine features such as shot distance, angle, rebound conditions, game context, and power-play situations. These features are then used to train and evaluate different machine-learning models. This first starts with simple Logistic Regression baselines, then moving onto XGBoost classifiers, and lastly exploring advanced and custom models to aim for performance improvement and interpretability.</p>
+
+<p>Carrying on, in order to guarantee reproducibility and experiment transparency, all experiments are monitored using Weights &amp; Biases (Wandb). Specifically this includes metrics, model artifacts, and hyperparameter configurations. Additionally, we visualize each model’s performance using calibration plots, ROC/AUC curves, and goal-rate analyses, where we compare how feature complexity and model selection impacts the predictive accuracy for Expected Goals.</p>
+
+<p>This blog post explains every phase of the modeling pipeline starting with Feature Engineering I, Baseline Models, Feature Engineering II, Advanced Models, Give it your best shot, and Evaluate on test set.</p>
+
+<h2 id="feature-engineering-i">Feature Engineering I</h2>
+
+<p>When we start our modelling pipeline, we concentrated on two key geometric features of a hockey shot — the distance and the angle relative to the net.
+Carrying on from the same data-wrangling tools developed in Milestone 1, we then extracted all the given SHOT and GOAL events from the NHL play-by-play data between the 2016/17 and 2019/20 regular seasons.</p>
+
+<p>For our initial tidied data set, we created four key features:</p>
+
+<p>distance_from_net (ft) – this is the euclidean distance of the shot from the net center</p>
+
+<p>angle_from_net (°) – the angle of the shot relative to the goal centerline</p>
+
+<p>is_goal – binary indicator (1 = goal, 0 = no goal)</p>
+
+<p>empty_net – the binary indicator for whether the net was empty at the time of the shot</p>
+
+<p>The final training dataset was designated as the NHL season data between 2016 to 2020 which contained over 1.28 million shot events, while the 2020/21 season data was reserved as the untouched test set.</p>
+
+<h3 id="1-a-histogram-distribution-by-distance">1 a) Histogram Distribution by Distance</h3>
+
+<p><img src="/assets/images/image-23.png" alt="Histogram Distribution by Distance" /></p>
+
+<p>The first histogram displays the shots  binned by distance from the net, separated by goal outcome. The histogram reveals that most shots occur within 10–40 feet of the net, and as expected, goals themselves are concentrated in shorter distances. This makes intuitive sense as it is easy to score goals closer to the net. 
+The goal frequency decreases drastically beyond 30 feet, this confirms that shot success probability decreases with distance. 
+The orange bars (goals) essentially disappears beyond 60 feet, consistent with the intuition that long-range shots are largely unsuccessful unless they occur under special conditions (e.g. deflections). All in all, this makes intuitive sense as it is harder to score farther away from the net.</p>
+
+<h3 id="1-b-histogram-distribution-by-angle">1 b) Histogram Distribution by Angle</h3>
+
+<p><img src="/assets/images/image-24.png" alt="Histogram Distribution by Angle" /></p>
+
+<p>The second histogram displays the plot shot counts by angle, where 0° corresponds to shots taken from directly in front of the hockey net and bigger angles displays positions farther away from the hockey net. 
+Moreover, we observe shots taken from smaller angles (specifically between 0–30°) likely display a higher proportion of goals compared to shots taken from larger angles which are more difficult to score from. 
+In conclusion, the decrease in the number of shots and goal scoring rate at wider angles conveys how shooting geometry minimizes scoring chances, as goalkeepers could better cover the net at these larger angles.</p>
+
+<h3 id="c-histogram-joint-distribution-of-distance-and-angle">c) Histogram Joint Distribution of Distance and Angle</h3>
+
+<p><img src="/assets/images/image-25.png" alt="2D Histogram Distribution of Angle and Distance" /></p>
+
+<p>Lastly, the 2D joint plot (distance * angle) displays that the most shots are clustered around 15–35 feet and angles below 35 to 40°. This forms a dense region of high-frequency shooting activity which is situated directly in front of the net, in hockey this is known as the high-danger area.</p>
+
+<p>The heatmap coloring being more red indicates an increased density of events (and goal probabilities) around this given zone. This further reiterates the idea that shots leading to goals is location dependent.</p>
+
+<h3 id="summary">Summary</h3>
+
+<p>All in all, these three histograms reconfirm the reliability of specific engineered geometric features.
+These plots reveal interpretable and understandable relationships between shot distance, angle, and the probability of scoring a goal. This lays the foundation for future models in which we can use distance and angles to help predict expected goals (xG).</p>
+
+<h3 id="2">2)</h3>
+
+<p><strong>Goal Rate Analysis by Distance and Angle:</strong></p>
+
+<p>This better analysis understands how shot geometry affects scoring outcomes, specifically we defined the goal rate as</p>
+
+<p>Goal Rate = # Goals/(# Goals + # No-Goals)</p>
+
+<p>where goal rate is a function of both distance from the net and shot angle.</p>
+
+<p><img src="/assets/images/image-26.png" alt="Plots of Goal Rates Compared to Distance and Angle from Net" /></p>
+
+<p>i) <strong>Plot 1: Goal Rate vs. Distance</strong></p>
+
+<p>Figure 1 displays a steep and nonlinear decline in goal rate as distance from the net increases. The plot shows that shots taken within 10 feet of the crease have an approximately 30 % chance of resulting in a goal — the highest success rate in the dataset Subsequently, the probability of scoring decreases rapidly between 10 ft – 30 ft, and ultimately falling below 10 % past 40 ft. After we go past 60 ft, the goal rate decreases below 5 %. This suggests that shots from long range almost never beat the goalie unless these given shots are to an empty-net or deflections. This rapid exponential-like decay reconfirms that the closeness to goal is the most influential spatial factor for scoring probability.</p>
+
+<p>ii) <strong>Plot 2: Goal Rate vs. Angle</strong></p>
+
+<p>Figure 2 displays a complementary trend with respect to goal rate in relation to angle. The strongest goal rates (between 12–14 %) occur for shots taken from key positions (between 0° – 20°) taken directly in front of the net. The success rate for the goal rate vs angle diminishes rapidly as we take shots from larger angles. This goal rate then falls below 6% for shots beyond 60°, where hockey players are likely shooting from behind the goal line or from the rink’s sideboards. The small bump in goal rate between 25°–35° could be derived from cross-ice passes or one-timers. This momentarily increases scoring chances even if we see bigger angles.</p>
+
+<p>iii) <strong>Overall Interpretation</strong></p>
+
+<p>All in all, these results show the importance of spatial dependency of shot quality for hockey. In essence, the closer and more central the shots are significantly more likely to score. 
+Significantly, Distance and angle connect together, they help define the “high-danger scoring area” — which corresponds approximately the slot in front of the crease within 25 ft and 30° of center. 
+These geometric patterns connect well with common sense intuition on hockey knowledge and validate that engineered geometric features (distance and angle from net) are meaningful predictors for the expected-goals (xG) model which will be developed in the subsequent sections.</p>
+
+<h3 id="3">3)</h3>
+
+<p><img src="/assets/images/image-27.png" alt="Goal Distance Histogram Empty vs Non-Empty Net" /></p>
+
+<p>In order to verify the data quality and guarantee realistic shot coordinates, the goal events separated into bins as empty-net and non-empty-net categories were examined. In addition the histogram displays that non-empty-net goals are located between 0–40 ft, this averages around 21.8 ft, and we see that empty-net goals occur a considerable distance farther out, averaging at around 45 ft and extending all the way up to 98 ft. 
+From the graph we can see that no non-empty-net goals surpass the cutoff threshold of 110 ft. This confirms that the recorded goals are all located within the real-life common sense on-ice distances.</p>
+
+<p>Essentially, a review of potential outliers found no real anomalies in the coordinate data or given shot type. We can see that occaisional long-range non-empty-net goals were were rare events in a hockey game (e.g., rebounds or delayed-penalty situations) compared to incorrect data errors.</p>
+
+<p>Overall, the histogram distribution connects with common sense hockey logic: close-range shots seriously dominate non-empty-net goals. We also see long-range shots are virtually entirely empty-net situations. This confirms that the engineered distance and event-type features are reliable and consistent.</p>
+
+<h2 id="baseline-models">Baseline Models</h2>
+
+<h3 id="1">1.</h3>
+
+<p><img src="/assets/images/image-28.png" alt="Logistic Regression Performance Metrics" /></p>
+
+<p>When we use the distance from the hockey net as the given input, we first trained a baseline Logistic Regression model with set default parameters to predict whether a hockey shot is a successful goal. The validation accuracy of the model was around 0.906, which may seem strong. However, the closer inspection of the given classification report and the confusion matrix displays that the model predicted the “no goal” class for all samples. The models achieves 100 % recall for non-goals and 0 % recall for goals. This predictive behaviour results from the severe class imbalance in the dataset for goals vs no goals — where goals represent a small fraction of all hockey shots.</p>
+
+<p>Although we can see that the prediction accuracy is high, this is misleading. This is because the model essentially always learned to predict the majority class. This signifies that given accuracy is not a reliable evaluation metric for an imbalanced binary classification question. If we wanted to properly analyze the model’s performance, we will examine probability-based metrics such as ROC curves, and calibration plots in later sections to allow us to better understand the how successful the model is.</p>
+
+<p>In conclusion, this baseline experiment indicates that while distance clearly influences goal likelihood, a simple linear classifier like a Logistic Regression model trained on raw labels cannot capture the true probabilistic nature of expected goals (xG) without good managing of class imbalances and more complicated features.</p>
+
+<h3 id="2-1">2.</h3>
+
+<p>After we have observed the downsides of the accuracy-based evaluation, we have shifted our focus to probability-based metrics to better understand the manner in how the model predicts expected goals. Using the predicted probabilities (predict_proba) from our logistic regression model, we produced four diagnostic plots to evaluate the respective calibration and discriminative power.</p>
+
+<p><img src="/assets/images/image-29.png" alt="ROC FPR vs TPR Curve" /></p>
+
+<p>a) The ROC curve (orange) lies consistently above the random baseline (blue dashed line), with an AUC = 0.690.
+This indicates that though the model has limited predictive strength, it is better than random guessing.
+Additionally, given that it relies on a single feature — distance from the net — the curve’s moderate shape reflects the common-sense relationship between proximity and goal likelihood: the closer the shot is to the goal, the higher the true-positive rate for a particular false-positive rate.</p>
+
+<p><img src="/assets/images/image-30.png" alt="Goal Rate based on Predicted Probability Percentile" /></p>
+
+<p>b) The plot of goal rate by probability percentile displays a significant upward trend — the higher the predicted probability percentile leads to a higher goal rate.
+Ultimately, this confirms that the model’s probability outputs are meaningful: even if these are imperfectly calibrated, they increase monotonically with the goal rate.</p>
+
+<p>However, you can see some variation exists across percentiles, the general pattern confirms that the model captures that distance influences scoring probability. However, the curve’s fairly gradual slope also suggests that the model’s discrimination power is moderate — meaning it separates likely from unlikely goals, although imperfectly.</p>
+
+<p>In conclusion, the logistic regression model’s predicted probabilities does correlate positively with the actual goal frequency. This demonstrates that the baseline Logistic Regression Model effectively provides useful, though imperfectly calibrated, expected-goal estimates.</p>
+
+<p><img src="/assets/images/image-31.png" alt="Cumulative Proportion of Goals vs Model Probability Percentile" /></p>
+
+<p>c) The cumulative goal curve increases drastically as we increase the probability percentile, which displays that a relatively small fraction of top-scoring shots explain a large portion of all goals. These results imply that the logistic regression model can effectively rank shots by quality, which then identifies higher-probability events even if we have more limited information. This curve ultimately demonstrates that the logistic regression model effectively discriminates between high- and low-quality scoring opportunities, providing meaningful expected-goal estimates even if the logistic regression calibration is again not perfect.</p>
+
+<p><img src="/assets/images/image-32.png" alt="Calibration Curve" /></p>
+
+<p>d) This given calibration curve indicates that predicted probabilities are centered near 0–0.2 and are close to the diagonal. This effectively means that the Logistic Regression model is well-calibrated within the lower-probability regions. However, because the given predicted values are already small, the model seems to underestimate the likelihood of rare goal events. This is another reflection of the dataset’s strong class imbalance.</p>
+
+<p>Overall, these diagnostics and plots demonstrate that while the distance-only logistic regression model is simple, it generally captures the correct pattern between shot proximity and goal probability. This moderate AUC and reasonable calibration make it a decent baseline, but we will need better and richer contextual features that will be required to improve discrimination and probability accuracy in later stages.</p>
+
+<h3 id="3-1">3.</h3>
+
+<p><img src="/assets/images/image-33.png" alt="ROC Curve for Logistic Regression Models" /></p>
+
+<p><strong>ROC Curve for Logistic Regression Models on WANB</strong>: <a href="https://wandb.ai/IFT6758-2025-B08/IFT6758-Milestone2/runs/r01d0bhp">View Run Summary on W&amp;B</a></p>
+
+<p><img src="/assets/images/image-34.png" alt="Goal Rate Compared to given Model Percentile" /></p>
+
+<p><strong>Goal Rate Curve on WANB</strong>: <a href="https://wandb.ai/IFT6758-2025-B08/IFT6758-Milestone2/runs/blfsfei1">View Run Summary on W&amp;B</a></p>
+
+<p><img src="/assets/images/image-35.png" alt="Cumulative Number of Goal Compared to Cumulative Number of Shots" /></p>
+
+<p><strong>Cumulative Goal Curve</strong>: <a href="https://wandb.ai/IFT6758-2025-B08/IFT6758-Milestone2/runs/b1sin6i8">View Run Summary on W&amp;B</a></p>
+
+<p><img src="/assets/images/image-37.png" alt="Calibration Curve for Different Feature Combinations" /></p>
+
+<p><img src="/assets/images/image-38.png" alt="Calibration Curve for Different Feature Combinations Brier Score" /></p>
+
+<p><strong>Calibration Curve</strong>: <a href="https://wandb.ai/IFT6758-2025-B08/IFT6758-Milestone2/runs/brvsei5q">View Run Summary on W&amp;B</a></p>
+
+<p>To test how certain geometric features contribute to scoring probability, we trained three Logistic Regression classifiers — one which only used distance, one which only used angles, and one which used distance and angles together — and compared these to a random baseline. Subsequently, the model’s outputs were evaluated with the same metrics as before: ROC curve (AUC), goal rate by percentile, and cumulative goal curve.</p>
+
+<p><strong>ROC Curve</strong></p>
+
+<p>As shown in the ROC comparison, the distance-only model achieved an AUC of 0.690, while the angle-only model performed worse at 0.565, indicating that distance is a much stronger single predictor of scoring likelihood. The combined distance + angle model reached the highest AUC of 0.708, confirming that angle adds complementary information about shot positioning. All three models performed well above the random baseline (AUC ≈ 0.49), demonstrating that even simple geometric inputs capture meaningful spatial structure in scoring events.</p>
+
+<p><strong>Goal Rate by Predicted Percentile</strong></p>
+
+<p>When shots were categorized by predicted probability percentile, the combined model of using both distance and angles showed the clearest monotonic relationship between model predictive probability and actual goal frequency. The distance-only curve generally followed a similar trend, while the angle-only model remained largely flat. This suggested that considering angle individually is less discriminative but can refine predictions if we use it in conjuction with distance.</p>
+
+<p><strong>Cumulative Goal Proportion</strong></p>
+
+<p>The cumulative goal plots reinforced the findings above: the combined distance and angle model captured goals more efficiently than the other models. The combined model reaches a higher cumulative goal fraction compared to any other given shot percentile. Contrastingly, the angle-only and random models seriously lagged behind. The graph which used only the distance or angle feature showed weaker goal concentration among higher-probability shots.</p>
+
+<p><strong>Calibration Curve</strong></p>
+
+<p>The calibration curve illustrates how well the predicted goal probabilities align with actual outcomes across all four models. As shown, the distance + angle model (blue) lies closest to the diagonal, indicating the most reliable calibration and the lowest Brier score (≈ 0.081). Both distance-only (green) and angle-only (red) models show reasonable calibration but tend to slightly under-predict goal likelihoods at higher probability bins. The random baseline (orange) remains nearly flat, confirming it provides no informative signal. Overall, these results demonstrate that incorporating both distance and angle features produces a better-calibrated logistic regression model, where predicted probabilities meaningfully reflect real scoring frequencies.</p>
+
+<p><strong>Interpretation</strong></p>
+
+<p>In conclusion, these comparisons indicate that the distance from the net is the larger geometric determinant of goal probability. However, adding the shot angle marginally improves the model’s discrimination ability. The combination of distance and angle model produces a more holistic understanding of the shot quality — this provides a foundation for more advanced feature engineering and hyperparameter tuning later in the milestones.</p>
+
+<h2 id="feature-engineering-ii">Feature Engineering II</h2>
+
+<p><img src="/assets/images/image-36.png" alt="Tidy_Data_Updated" /></p>
+
+<p><strong>Feature Engineering II: Contextual and Power-Play Features</strong></p>
+
+<p>Continuing on the transformed shot-level data from the previous sections, the dataset was augmented with new features that convey game-context and spatio-temporal dynamics.
+The resulting tidy_data_updated has 21 columns, which combines raw shot information, event-based contexts, and adds special-team situations all together.</p>
+
+<p>The table below is the feature/column list of tidy_data_updated with a description for each feature:</p>
+
+<p><strong>Column Name	Description</strong></p>
+<ol>
+  <li>game_id: The unique identifier for each NHL game.</li>
+  <li>game_seconds: The total completed seconds from the game’s start.</li>
+  <li>game_period: The period of the given hockey game (1, 2, 3, or OT) at the moment.</li>
+  <li>x_coord, 5. y_coord:	The given shot coordinates on the rink (in feet).</li>
+  <li>shot_distance: The given distance from the net to the location where the shot was taken.</li>
+  <li>shot_angle: The angle of the shot relative to the centerline goal.</li>
+  <li>shot_type: The given type of shot (e.g., wrist-shot, slap-shot, tip-in, etc.).</li>
+  <li>is_goal: The	Binary indicator showing whether a goal was scored (1 = goal, 0 = no goal).</li>
+  <li>empty_net: The indicator showing whether or not the net was empty:	1 if the shot was an empty net, else 0.</li>
+  <li>last_event_type: The type of the preceding event in the hockey game (e.g., pass, rebound, block, hit).</li>
+  <li>last_event_x_coord, 13. last_event_y_coord: The given x, y coordinates of the last recorded event.</li>
+  <li>time_since_last_event: The number of seconds elapsed since the previous event.</li>
+  <li>distance_from_last_event: The distance (in feet) between the last event and the current shot.</li>
+  <li>rebound: Boolean column which is True if the last event was also a shot, indicating a rebound chance, false otherwise.</li>
+  <li>change_in_shot_angle: The change in shot angle between the last and current events (in degrees).</li>
+  <li>speed: The Average puck speed, computed as distance_from_last_event / time_since_last_event.</li>
+  <li>time_since_power_play_start: The elapsed seconds since the start of a power-play; resets to 0 when the advantage ends.</li>
+  <li>friendly_skaters, 21. opposing_skaters: The number of non-goalie skaters on each team, this accounts for specific penalties and power-play situations.</li>
+</ol>
+
+<p><strong>Summary and Insights</strong></p>
+
+<p>These engineered features transform the dataset with temporal flow, event sequence, and situational awareness, enabling more realistic modeling of how goals occur in-game context.
+Specifically, features like rebound, speed, and change_in_shot_angle measure the danger of the shot subsequent to following prior plays, while the power-play indicators (time_since_power_play_start, friendly_skaters, opposing_skaters) indicate how these given situations influence goal probability.
+This modified dataset gives a good foundation for training more complex expected goals (xG) models which are capable of reflecting complete dynamics of NHL end-to-end play sequences.</p>
+
+<p><strong>Tidy Data Updated Table W&amp;B link:</strong> <a href="https://wandb.ai/IFT6758-2025-B08/my_project/artifacts/dataset/wpg_v_wsh_2017021065/v3/files/wpg_v_wsh_2017021065.table.json">View 2017 NHL Game Dataset on W&amp;B</a></p>
+
+<h2 id="advanced-models">Advanced Models</h2>
+
+<p>In this section, we advanced beyond the baseline Logistic Regression and Neural Network models to build <strong>high-performance XGBoost classifiers</strong>.<br />
+Our goal was to analyze whether the inclusion of engineered features, combined with <strong>hyperparameter tuning, calibration</strong>, and <strong>feature selection</strong>, can enhance predictive performance.</p>
+
+<p>All experiments were tracked through <strong>Weights &amp; Biases (wandb)</strong> for transparency and reproducibility.</p>
+
+<hr />
+
+<h3 id="q1--baseline-xgboost-distance--angle-only">Q1 — Baseline XGBoost (Distance &amp; Angle Only)</h3>
+
+<p>The first step was to train a <strong>baseline XGBoost model</strong> using only the <code class="language-plaintext highlighter-rouge">distance_from_net</code> and <code class="language-plaintext highlighter-rouge">angle_from_net</code> features.<br />
+This model served as a comparison to Logistic Regression and provided a baseline before incorporating all engineered features.</p>
+
+<p><strong>Training setup:</strong></p>
+<ul>
+  <li>Train shape: (262,031 × 3)</li>
+  <li>Validation shape: (65,311 × 3)</li>
+  <li>Optimizer: <code class="language-plaintext highlighter-rouge">XGBClassifier</code> (default parameters)</li>
+  <li>Evaluation metric: <code class="language-plaintext highlighter-rouge">roc_auc</code></li>
+</ul>
+
+<p><strong>Results:</strong></p>
+<ul>
+  <li>Validation Accuracy: <strong>0.9082</strong></li>
+  <li>Validation AUC: <strong>0.7422</strong></li>
+  <li>FAST training complete and all plots saved.</li>
+</ul>
+
+<p>These results already surpassed Logistic Regression from Task 3, showing XGBoost’s strength in capturing nonlinear patterns.</p>
+
+<p><strong>Visualizations:</strong></p>
+
+<p><img src="/assets/images/roc_curve_xgb_vs_logistic.png" alt="XGBoost vs Logistic Regression ROC" />
+<img src="/assets/images/xgb_goal_vs_probability.jpg" alt="XGBoost Goal vs Probability" /></p>
+
+<p><strong>WandB Run:</strong> <a href="https://wandb.ai/IFT6758-2025-B08/IFT6758-Milestone2">View Baseline XGBoost Experiment</a></p>
+
+<blockquote>
+  <p>⚡ <strong>Observation:</strong> Even with just two features, XGBoost outperforms Logistic Regression in both AUC and calibration, demonstrating its capability to model nonlinear relationships in hockey shot data.</p>
+</blockquote>
+
+<hr />
+
+<h3 id="q2--xgboost-with-all-features-and-hyperparameter-tuning">Q2 — XGBoost with All Features and Hyperparameter Tuning</h3>
+
+<p>We next trained an <strong>XGBoost classifier</strong> using all engineered features (26 total) and applied <strong>GridSearchCV</strong> for fine-tuned optimization.</p>
+
+<p><strong>Dataset dimensions:</strong></p>
+<ul>
+  <li>Training: (1,319,337 × 26)</li>
+  <li>Validation: (329,835 × 26)</li>
+</ul>
+
+<p><strong>Grid Search Parameters:</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Hyperparameter</th>
+      <th>Tested Range</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">learning_rate</code></td>
+      <td>[0.01, 0.05, 0.1]</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">max_depth</code></td>
+      <td>[3, 5, 7]</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">n_estimators</code></td>
+      <td>[100, 200, 300]</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">colsample_bytree</code></td>
+      <td>[0.6, 0.8, 1.0]</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">subsample</code></td>
+      <td>[0.6, 0.8, 1.0]</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">min_child_weight</code></td>
+      <td>[1, 3, 5]</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Best Configuration:</strong></p>
+<ul>
+  <li>colsample_bytree = 0.8</li>
+  <li>learning_rate = 0.05</li>
+  <li>max_depth = 5</li>
+  <li>min_child_weight = 1</li>
+  <li>n_estimators = 200</li>
+  <li>subsample = 0.8</li>
+</ul>
+
+<p><strong>Performance:</strong></p>
+<ul>
+  <li>Best CV AUC = 0.7576</li>
+  <li>Validation AUC = 0.7577</li>
+  <li>Validation Accuracy = 0.9083</li>
+</ul>
+
+<p><img src="/assets/images/performance_model_complexity.jpg" alt="Performance vs Model Complexity" /></p>
+
+<p>This model showed strong generalization while avoiding overfitting at higher tree depths.</p>
+
+<hr />
+
+<h3 id="probability-calibration-and-reliability">Probability Calibration and Reliability</h3>
+
+<p>After tuning, the model’s output probabilities were <strong>calibrated using Isotonic Regression</strong>.<br />
+«««&lt; HEAD
+Calibration ensures predicted probabilities closely reflect true outcome frequencies.
+=======
+Calibration helps ensure that the predicted probabilities better represent true likelihoods.</p>
+<ul>
+  <li><strong>Baseline AUC:</strong> ~0.71</li>
+  <li><strong>Optimized AUC:</strong> ~0.7576</li>
+  <li>Improved discrimination and more stable probability outputs were observed.
+    <blockquote>
+      <blockquote>
+        <blockquote>
+          <blockquote>
+            <blockquote>
+              <blockquote>
+                <blockquote>
+                  <p>29cd1c5b0656990849648ff14de51af2f1f8cc36</p>
+                </blockquote>
+              </blockquote>
+            </blockquote>
+          </blockquote>
+        </blockquote>
+      </blockquote>
+    </blockquote>
+  </li>
+</ul>
+
+<p><img src="/assets/images/q3_calibration.jpg" alt="Calibration Plot for XGBoost" />
+<img src="/assets/images/reliability_curve_xgb_q1.jpg" alt="Reliability Curve (XGBoost - Q1)" /></p>
+
+<blockquote>
+  <p>⚡ A well-calibrated model ensures that a predicted 0.7 goal probability corresponds to a real-world 70% chance of scoring.</p>
+</blockquote>
+
+<hr />
+
+<h3 id="roc-comparison-across-models">ROC Comparison Across Models</h3>
+
+<p>We compared ROC curves across Logistic Regression, Neural Network, and XGBoost.<br />
+The <strong>tuned XGBoost</strong> dominates the upper-left quadrant, confirming its superior ability to distinguish between goals and no-goals.</p>
+
+<p><img src="/assets/images/roc_comparison.jpg" alt="ROC Comparison" /></p>
+
+<p><strong>Performance Comparison:</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Metric</th>
+      <th>Logistic Regression</th>
+      <th>Neural Network</th>
+      <th>XGBoost (Tuned)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Accuracy</strong></td>
+      <td>0.785</td>
+      <td>0.791</td>
+      <td>0.908</td>
+    </tr>
+    <tr>
+      <td><strong>AUC</strong></td>
+      <td>0.702</td>
+      <td>0.734</td>
+      <td>0.758</td>
+    </tr>
+    <tr>
+      <td><strong>Precision</strong></td>
+      <td>0.16</td>
+      <td>0.19</td>
+      <td>0.21</td>
+    </tr>
+    <tr>
+      <td><strong>Recall</strong></td>
+      <td>0.39</td>
+      <td>0.45</td>
+      <td>0.47</td>
+    </tr>
+    <tr>
+      <td><strong>F1 Score</strong></td>
+      <td>0.23</td>
+      <td>0.27</td>
+      <td>0.29</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>WandB Run:</strong> <a href="https://wandb.ai/IFT6758-2025-B08/IFT6758-Milestone2/runs/66fc753h">View Tuned XGBoost Experiment</a></p>
+
+<hr />
+
+<h3 id="q3--feature-selection-and-model-simplification">Q3 — Feature Selection and Model Simplification</h3>
+
+<p>Once the tuned model was established, we explored <strong>feature selection</strong> to simplify the model without losing performance.<br />
+Techniques used:</p>
+
+<ul>
+  <li><strong>ANOVA F-test</strong> for statistical significance ranking</li>
+  <li><strong>SHAP values</strong> for feature contribution interpretation</li>
+</ul>
+
+<p><strong>Visualizations:</strong></p>
+
+<p><img src="/assets/images/top_feature_importance.jpg" alt="Top Feature Importance (XGBoost)" />
+<img src="/assets/images/top_features_annova.jpg" alt="Top Features by ANOVA" /></p>
+
+<p><strong>Findings:</strong></p>
+<ul>
+  <li><strong>Shot Distance</strong>, <strong>Shot Angle</strong>, and <strong>Rebound indicators</strong> were dominant.</li>
+  <li>Features like <code class="language-plaintext highlighter-rouge">last_event_type</code> and <code class="language-plaintext highlighter-rouge">time_since_last_event</code> added marginal improvement.</li>
+</ul>
+
+<p>After retraining with only top-ranked features:</p>
+<ul>
+  <li><strong>AUC:</strong> 0.754 (vs 0.757 with all features)</li>
+  <li><strong>Accuracy:</strong> 0.906 (vs 0.908)</li>
+  <li><strong>Model size reduced by:</strong> ~25%</li>
+  <li><strong>Inference speed improved by:</strong> +30%</li>
+</ul>
+
+<p><strong>WandB Run:</strong> <a href="https://wandb.ai/IFT6758-2025-B08/IFT6758-Milestone2">View Feature-Selected XGBoost Experiment</a></p>
+
+<hr />
+
+<h3 id="final-summary">Final Summary</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Step</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Model</strong></td>
+      <td>XGBoost (baseline → tuned → feature-selected)</td>
+    </tr>
+    <tr>
+      <td><strong>Validation Accuracy (final)</strong></td>
+      <td>0.908</td>
+    </tr>
+    <tr>
+      <td><strong>Validation AUC (final)</strong></td>
+      <td>0.758</td>
+    </tr>
+    <tr>
+      <td><strong>Key Features</strong></td>
+      <td>Distance, Angle, Rebound Indicators, Shot Type</td>
+    </tr>
+    <tr>
+      <td><strong>Key Improvements</strong></td>
+      <td>Calibration, Reliability, ROC Curve, Feature Interpretability</td>
+    </tr>
+    <tr>
+      <td><strong>Tools Used</strong></td>
+      <td>Matplotlib, Seaborn, Scikit-learn, SHAP, WandB</td>
+    </tr>
+    <tr>
+      <td><strong>Model Registry</strong></td>
+      <td>All experiments logged to WandB Model Registry</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="key-takeaways">Key Takeaways</h3>
+
+<ul>
+  <li>XGBoost with only <code class="language-plaintext highlighter-rouge">distance</code> and <code class="language-plaintext highlighter-rouge">angle</code> already outperforms Logistic Regression.</li>
+  <li>Adding all engineered features and tuning hyperparameters further improved performance (0.908 Accuracy, 0.7577 AUC).</li>
+  <li>Probability calibration ensured reliable predictions for decision-making.</li>
+  <li>Feature selection simplified the model without significant performance loss, improving speed and interpretability.</li>
+</ul>
+
+<blockquote>
+  <p>✅ This task demonstrates how <strong>advanced optimization and interpretability</strong> combine to produce a reliable, explainable, and production-ready predictive model for hockey shot outcomes.</p>
+</blockquote>
+
+<p><strong>XGB Boost Baseline Run Trained on Distance &amp; Angle Only:</strong> <a href="https://wandb.ai/IFT6758-2025-B08/IFT6758-Milestone2/runs/wmf4j068">XGB Boost Baseline Distance &amp; Angle WANB Summary</a></p>
+
+<p><strong>XGB Boost Baseline Run Trained on All Features:</strong> <a href="https://wandb.ai/IFT6758-2025-B08/IFT6758-Milestone2/runs/66fc753h">XGB Boost All Features</a></p>
+
+<p><strong>XGB Boost Baseline Run Trained on Selected Features:</strong> <a href="https://wandb.ai/IFT6758-2025-B08/IFT6758-Milestone2/runs/rs1c75w8">XGB Boost Selected Features</a></p>
+
+<h2 id="give-it-your-best-shot">Give it your best shot!</h2>
+
+<h2 id="evaluate-on-test-set">Evaluate on test set!</h2>
+
+<p>Predicting goals in ice hockey is a challenging task due to the highly imbalanced nature of shot outcomes — most shots do <strong>not result in a goal</strong>. In this project, we explored <strong>three models</strong>: Neural Networks (NN), XGBoost (XGB), and Logistic Regression (LogReg) to predict whether a shot will result in a goal using NHL game data from the 2016-2021 seasons.</p>
+
+<p>We trained our models on <strong>regular season data</strong> from 2016-2020 and tested them on the <strong>2020-2021 season</strong>, separately analyzing <strong>regular season</strong> and <strong>playoff games</strong>. The evaluation focused not only on traditional metrics such as accuracy, precision, recall, F1 score, and ROC-AUC, but also on <strong>probability calibration</strong>, <strong>cumulative goal curves</strong>, and <strong>confusion matrices</strong> to assess how well the models can rank shots according to scoring likelihood.</p>
+
+<hr />
+
+<h3 id="neural-network-nn">Neural Network (NN)</h3>
+
+<p>We built a fully-connected NN with three hidden layers, batch normalization, and dropout for regularization. The model was trained using <strong>binary cross-entropy</strong> and class weights to handle the strong imbalance between goals and non-goals. Optimal probability thresholds were chosen to maximize F1 score.</p>
+
+<p><strong>Visual Evaluation</strong></p>
+
+<p><strong>Confusion Matrices</strong></p>
+
+<p><img src="/assets/images/regular_season_confusion.png" alt="NN Regular Season Confusion Matrix" /><br />
+<img src="/assets/images/playoffs_confusion.png" alt="NN Playoffs Confusion Matrix" /></p>
+
+<p><strong>ROC Curves</strong></p>
+
+<p><img src="/assets/images/regular_season_roc.png" alt="NN Regular Season ROC" /><br />
+<img src="/assets/images/playoffs_roc.png" alt="NN Playoffs ROC" /></p>
+
+<p><strong>Calibration Curves</strong></p>
+
+<p><img src="/assets/images/regular_season_calibration.png" alt="NN Regular Season Calibration" /><br />
+<img src="/assets/images/playoffs_calibration.png" alt="NN Playoffs Calibration" /></p>
+
+<p><strong>Probability Distributions</strong></p>
+
+<p><img src="/assets/images/regular_season_probability.png" alt="NN Regular Season Probability" /><br />
+<img src="/assets/images/playoffs_probability.png" alt="NN Playoffs Probability" /></p>
+
+<hr />
+
+<h3 id="xgboost-xgb">XGBoost (XGB)</h3>
+
+<p>XGB is a gradient boosting ensemble method that excels with tabular data. Early stopping and class weights were used during training to prevent overfitting and to handle class imbalance.</p>
+
+<p><strong>Visual Evaluation</strong></p>
+
+<p><strong>Confusion Matrices</strong></p>
+
+<p><img src="/assets/images/xgb_regular_confusion.png" alt="XGB Regular Season Confusion Matrix" /><br />
+<img src="/assets/images/xgb_playoffs_confusion.png" alt="XGB Playoffs Confusion Matrix" /></p>
+
+<p><strong>ROC Curves</strong></p>
+
+<p><img src="/assets/images/xgb_regular_roc.png" alt="XGB Regular Season ROC" /><br />
+<img src="/assets/images/xgb_playoffs_roc.png" alt="XGB Playoffs ROC" /></p>
+
+<p><strong>Calibration Curves</strong></p>
+
+<p><img src="/assets/images/xgb_regular_calibration.png" alt="XGB Regular Season Calibration" /><br />
+<img src="/assets/images/xgb_playoffs_calibration.png" alt="XGB Playoffs Calibration" /></p>
+
+<p><strong>Probability Distributions</strong></p>
+
+<p><img src="/assets/images/xgb_regular_probability.png" alt="XGB Regular Season Probability" /><br />
+<img src="/assets/images/xgb_playoffs_probability.png" alt="XGB Playoffs Probability" /></p>
+
+<hr />
+
+<h3 id="logistic-regression-logreg">Logistic Regression (LogReg)</h3>
+
+<p>Logistic Regression is a simple baseline model that provides interpretable coefficients for features. Threshold optimization was applied to maximize F1 score and probability calibration.</p>
+
+<p><strong>Visual Evaluation</strong></p>
+
+<p><strong>Confusion Matrices</strong></p>
+
+<p><img src="/assets/images/logreg_regular_confusion.png" alt="LogReg Regular Season Confusion Matrix" /><br />
+<img src="/assets/images/logreg_playoffs_confusion.png" alt="LogReg Playoffs Confusion Matrix" /></p>
+
+<p><strong>ROC Curves</strong></p>
+
+<p><img src="/assets/images/logreg_regular_roc.png" alt="LogReg Regular Season ROC" /><br />
+<img src="/assets/images/logreg_playoffs_roc.png" alt="LogReg Playoffs ROC" /></p>
+
+<p><strong>Calibration Curves</strong></p>
+
+<p><img src="/assets/images/logreg_regular_calibration.png" alt="LogReg Regular Season Calibration" /><br />
+<img src="/assets/images/logreg_playoffs_calibration.png" alt="LogReg Playoffs Calibration" /></p>
+
+<p><strong>Probability Distributions</strong></p>
+
+<p><img src="/assets/images/logreg_regular_prob_hist.png" alt="LogReg Regular Season Probability" /><br />
+<img src="/assets/images/logreg_playoffs_prob_hist.png" alt="LogReg Playoffs Probability" /></p>
+
+<hr />
+
+<h3 id="summary-of-test-metrics">Summary of Test Metrics</h3>
+
+<p>The following table summarizes the main evaluation metrics for all models and datasets. It provides a quick comparison of overall performance:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Model</th>
+      <th>Dataset</th>
+      <th>Accuracy</th>
+      <th>Precision</th>
+      <th>Recall</th>
+      <th>F1 Score</th>
+      <th>ROC-AUC</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>NN</td>
+      <td>Regular Season</td>
+      <td>0.785</td>
+      <td>0.224</td>
+      <td>0.478</td>
+      <td>0.306</td>
+      <td>0.747</td>
+    </tr>
+    <tr>
+      <td>NN</td>
+      <td>Playoffs</td>
+      <td>0.792</td>
+      <td>0.196</td>
+      <td>0.454</td>
+      <td>0.274</td>
+      <td>0.734</td>
+    </tr>
+    <tr>
+      <td>XGB</td>
+      <td>Regular Season</td>
+      <td>0.772</td>
+      <td>0.221</td>
+      <td>0.516</td>
+      <td>0.309</td>
+      <td>0.746</td>
+    </tr>
+    <tr>
+      <td>XGB</td>
+      <td>Playoffs</td>
+      <td>0.777</td>
+      <td>0.190</td>
+      <td>0.483</td>
+      <td>0.272</td>
+      <td>0.730</td>
+    </tr>
+    <tr>
+      <td>LogReg</td>
+      <td>Regular Season</td>
+      <td>0.767</td>
+      <td>0.218</td>
+      <td>0.526</td>
+      <td>0.309</td>
+      <td>0.746</td>
+    </tr>
+    <tr>
+      <td>LogReg</td>
+      <td>Playoffs</td>
+      <td>0.821</td>
+      <td>0.217</td>
+      <td>0.411</td>
+      <td>0.284</td>
+      <td>0.735</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="insights">Insights</h3>
+
+<ol>
+  <li><strong>NN &amp; XGB perform similarly</strong>, with slightly better recall than Logistic Regression — important in imbalanced shot data.</li>
+  <li><strong>Playoffs are harder to predict</strong>, likely due to lower number of shots and tighter defenses.</li>
+  <li><strong>Probability calibration</strong> shows that all models tend to slightly overpredict high probability goals, especially in playoffs.</li>
+  <li>Logistic Regression provides a simple, interpretable baseline, but ensemble/tree methods are slightly better for nuanced interactions.</li>
+  <li>Using <strong>both distance and angle features</strong>, along with contextual and temporal information (rebound, speed, power-play indicators), allows the models to capture the underlying patterns of goal probability more effectively.</li>
+  <li>These evaluation results provide a <strong>baseline for expected-goals (xG) models</strong> in hockey analytics and demonstrate the value of probability-based metrics in highly imbalanced datasets.</li>
+</ol>
+
+<hr />
+
+<p><em>All images referenced in this blog are outputs generated during model evaluation and saved locally.</em></p>
+
+  </div><a class="u-url" href="/data%20science/nhl/python/2025/11/07/nhl-play-by-play-analysis-milestone-2.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">NHL Play-by-Play Data Analysis</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">NHL Play-by-Play Data Analysis</li><li><a class="u-email" href="mailto:lucius.hatherly@umontreal.ca">lucius.hatherly@umontreal.ca</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/lucius1998"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">lucius1998</span></a></li><li><a href="https://www.twitter.com/jekyllrb"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">jekyllrb</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Exploring NHL play-by-play data between 2016–2024 using Python</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
