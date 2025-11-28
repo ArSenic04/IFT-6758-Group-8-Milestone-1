@@ -1,14 +1,17 @@
+## Online Link where you can view the log
 Logs Link: 127.0.0.1:5000/logs
 
 Example Test Script:
 
-## Before running test for flask app, note I used Flask version 2.3 for running app.py, make sure you have severed the connection to any
-## older flask runs, and have deleted any flask.logs pycaches or models which have been used before from your Visual Studio code or whatever platform you are running this from. 
+## Before running test for flask app, make sure you have severed the connection to any
+## older flask runs, and have deleted any pycaches or models which have been used before 
 
 ## Note this presumes you run the test on windows, UBUNTU will need CURL commands 
 
+# First access the serving folder with the commands cd serving 
+
 # In the first VS Code Terminal, run line below 
-python -m waitress --listen=0.0.0.0:5000 serving.app:app
+python -m waitress --listen=0.0.0.0:5000 app:app
 
 # Create a new terminal and execute the following commands 
 # Test logs
