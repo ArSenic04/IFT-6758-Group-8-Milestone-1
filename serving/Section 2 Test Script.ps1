@@ -2,8 +2,8 @@ Logs Link: 127.0.0.1:5000/logs
 
 Example Test Script:
 
-## Before running test for flask app, make sure you have severed the connection to any
-## older flask runs, and have deleted any pycaches or models which have been used before 
+## Before running test for flask app, note I used Flask version 2.3 for running app.py, make sure you have severed the connection to any
+## older flask runs, and have deleted any flask.logs pycaches or models which have been used before from your Visual Studio code or whatever platform you are running this from. 
 
 ## Note this presumes you run the test on windows, UBUNTU will need CURL commands 
 
